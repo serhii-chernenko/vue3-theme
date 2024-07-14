@@ -1,10 +1,16 @@
-// @ts-nocheck
-// remove the line above if you want to use TS
-// if you prefer plain JS, leave as is
+import { ref, onMounted, onUpdated } from 'vue'
+import type { Ref } from 'vue'
 
-import { ref } from 'vue'
-export const useTheme = () => {
-    const theme = ref('light')
+type Theme = 'light' | 'dark' | 'cupcake' | 'coffee'
+export const useTheme = (theme: Theme = 'light'): Ref<Theme> => {
+    const currentTheme = ref<Theme>(theme)
 
-    return theme
+    const setTheme = () => {
+        document.documentElement.dataset.theme = currentTheme.value
+    }
+
+    onMounted(() => setTheme())
+    onUpdated(() => setTheme())
+
+    return currentTheme
 }
